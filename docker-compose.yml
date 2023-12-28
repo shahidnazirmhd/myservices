@@ -1,0 +1,39 @@
+services:
+  postgres:
+    container_name: mysql
+    image: mysql
+    environment:
+      MYSQL_USER: amigoscode
+      MYSQL_PASSWORD: password
+      PGDATA: /data/mysql
+    volumes:
+      - mysql:/data/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - mysql
+    restart: unless-stopped
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - mysql
+    restart: unless-stopped
+
+networks:
+  mysql:
+    driver: bridge
+  spring:
+    driver: bridge
+
+volumes:
+  mysql:
+  pgadmin:
